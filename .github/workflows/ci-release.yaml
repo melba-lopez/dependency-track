@@ -11,7 +11,7 @@ on:
 
 jobs:
   prepare-release:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       version: ${{ steps.variables.outputs.version }}
       next-version: ${{ steps.variables.outputs.next-version }}
