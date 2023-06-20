@@ -100,8 +100,8 @@
         <lib.log4j-over-slf4j.version>2.0.7</lib.log4j-over-slf4j.version>
         <!-- JDBC Drivers -->
         <lib.jdbc-driver.mssql.version>12.2.0.jre11</lib.jdbc-driver.mssql.version>
-        <!-- Upgrading to 8.0.33 as https://github.com/datanucleus/datanucleus-rdbms/issues/446 is resolved! -->
-        <lib.jdbc-driver.mysql.version>8.0.33</lib.jdbc-driver.mysql.version>
+        <!-- Leaving JDBC on 8.0.29 per Issue #1970;  https://github.com/datanucleus/datanucleus-rdbms/issues/446 is resolved! -->
+        <lib.jdbc-driver.mysql.version>8.0.29</lib.jdbc-driver.mysql.version>
         <lib.jdbc-driver.postgresql.version>42.6.0</lib.jdbc-driver.postgresql.version>
         <!-- Maven Plugin Properties -->
         <plugin.cyclonedx.projectType>application</plugin.cyclonedx.projectType>
