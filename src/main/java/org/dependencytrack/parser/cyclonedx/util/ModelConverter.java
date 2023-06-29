@@ -104,6 +104,7 @@ public class ModelConverter {
         component.setAuthor(StringUtils.trimToNull(cycloneDxComponent.getAuthor()));
         component.setBomRef(StringUtils.trimToNull(cycloneDxComponent.getBomRef()));
         component.setPublisher(StringUtils.trimToNull(cycloneDxComponent.getPublisher()));
+        component.setSupplier(StringUtils.trimToNull(cycloneDxComponent.getSupplier()));/**Issue #2373, #2737 */
         component.setGroup(StringUtils.trimToNull(cycloneDxComponent.getGroup()));
         component.setName(StringUtils.trimToNull(cycloneDxComponent.getName()));
         component.setVersion(StringUtils.trimToNull(cycloneDxComponent.getVersion()));
@@ -313,6 +314,7 @@ public class ModelConverter {
             cycloneComponent.setBomRef(project.getUuid().toString());
             cycloneComponent.setAuthor(StringUtils.trimToNull(project.getAuthor()));
             cycloneComponent.setPublisher(StringUtils.trimToNull(project.getPublisher()));
+            cycloneComponent.setSupplier(StringUtils.trimToNull(project.getSupplier()));/**Issue #2373, #2737 */
             cycloneComponent.setGroup(StringUtils.trimToNull(project.getGroup()));
             cycloneComponent.setName(StringUtils.trimToNull(project.getName()));
             if (StringUtils.trimToNull(project.getVersion()) == null) {
