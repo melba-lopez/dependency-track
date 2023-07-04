@@ -73,6 +73,7 @@ import java.util.UUID;
                 @Persistent(name = "name"),
                 @Persistent(name = "author"),
                 @Persistent(name = "publisher"),
+                @Persistent(name = "supplier"),
                 @Persistent(name = "group"),
                 @Persistent(name = "name"),
                 @Persistent(name = "description"),
@@ -285,6 +286,14 @@ public class Project implements Serializable {
 
     public void setPublisher(String publisher) {
         this.publisher = publisher;
+    }
+
+    public OrganizationalEntity getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(OrganizationalEntity supplier) {
+        this.supplier = supplier;
     }
 
     public String getGroup() {

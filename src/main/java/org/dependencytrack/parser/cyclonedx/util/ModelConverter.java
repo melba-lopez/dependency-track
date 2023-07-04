@@ -104,7 +104,7 @@ public class ModelConverter {
         component.setAuthor(StringUtils.trimToNull(cycloneDxComponent.getAuthor()));
         component.setBomRef(StringUtils.trimToNull(cycloneDxComponent.getBomRef()));
         component.setPublisher(StringUtils.trimToNull(cycloneDxComponent.getPublisher()));
-        component.setSupplier(StringUtils.trimToNull(cycloneDxComponent.getSupplier()));/**Issue #2373, #2737 */
+        component.setSupplier(cycloneDxComponent.getSupplier());/**Issue #2373, #2737 */
         component.setGroup(StringUtils.trimToNull(cycloneDxComponent.getGroup()));
         component.setName(StringUtils.trimToNull(cycloneDxComponent.getName()));
         component.setVersion(StringUtils.trimToNull(cycloneDxComponent.getVersion()));
@@ -314,7 +314,6 @@ public class ModelConverter {
             cycloneComponent.setBomRef(project.getUuid().toString());
             cycloneComponent.setAuthor(StringUtils.trimToNull(project.getAuthor()));
             cycloneComponent.setPublisher(StringUtils.trimToNull(project.getPublisher()));
-            cycloneComponent.setSupplier(StringUtils.trimToNull(project.getSupplier()));/**Issue #2373, #2737 */
             cycloneComponent.setGroup(StringUtils.trimToNull(project.getGroup()));
             cycloneComponent.setName(StringUtils.trimToNull(project.getName()));
             if (StringUtils.trimToNull(project.getVersion()) == null) {
@@ -349,6 +348,32 @@ public class ModelConverter {
                     references.add(ref);
                 });
                 cycloneComponent.setExternalReferences(references);
+            }
+            /*Issue #2737:  Adding supplier contact functionality */
+            if (project.getSupplier() != null) {
+                OrganizationalEntity supplier = new OrganizationalEntity();
+                supplier.setName(project.getSupplier().getName());
+            
+                if (project.getSupplier().getUrls() != null) {
+                    supplier.setUrls(project.getSupplier().getUrls());
+                } else {
+                    supplier.setUrls(null);
+                }
+                if (project.getSupplier().getContacts() != null) {
+                    List<OrganizationalContact> contacts = new ArrayList<>();
+
+                    for (org.cyclonedx.model.OrganizationalContact supplierContact: project.getSupplier().getContacts()) {
+                        OrganizationalContact contact = new OrganizationalContact();
+                        contact.setName(supplierContact.getName());
+                        contact.setEmail(supplierContact.getEmail());
+                        contact.setPhone(supplierContact.getPhone());
+                        contacts.add(contact);
+                    }
+                    supplier.setContacts(contacts);
+                }
+                project.setSupplier(supplier);
+            } else {
+                cycloneComponent.setSupplier(null);
             }
             metadata.setComponent(cycloneComponent);
         }

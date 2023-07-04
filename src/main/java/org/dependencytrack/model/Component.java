@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.github.packageurl.MalformedPackageURLException;
 import com.github.packageurl.PackageURL;
 import org.apache.commons.lang3.StringUtils;
+import org.cyclonedx.model.OrganizationalEntity;
 import org.dependencytrack.resources.v1.serializers.CustomPackageURLSerializer;
 
 import javax.jdo.annotations.Column;
@@ -119,7 +120,7 @@ public class Component implements Serializable {
     @Column(name = "SUPPLIER", jdbcType = "VARCHAR")
     @Size(max = 255)
     @Pattern(regexp = RegexSequence.Definition.PRINTABLE_CHARS, message = "The supplier may only contain printable characters")
-    private String supplier;
+    private OrganizationalEntity supplier;
 
     @Persistent
     @Column(name = "GROUP", jdbcType = "VARCHAR")
@@ -388,14 +389,13 @@ public class Component implements Serializable {
         this.publisher = publisher;
     }
 
-    public String getSupplier() {/**Issue #2373, #2737 */
+    public OrganizationalEntity getSupplier() { /**Issue #2373, #2737 */
         return supplier;
     }
 
-    public void setSupplier(String supplier) {/**Issue #2373, #2737 */
+    public void setSupplier(OrganizationalEntity supplier) {/**Issue #2373, #2737 */
         this.supplier = supplier;
     }
-
     public String getGroup() {
         return group;
     }
