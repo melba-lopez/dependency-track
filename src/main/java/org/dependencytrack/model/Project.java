@@ -131,6 +131,12 @@ public class Project implements Serializable {
     @Pattern(regexp = RegexSequence.Definition.PRINTABLE_CHARS, message = "The publisher may only contain printable characters")
     private String publisher;
 
+    @Persistent /**Issue #2373, #2737 */
+    @Column(name = "SUPPLIER", jdbcType = "VARCHAR")
+    @Size(max = 255)
+    @Pattern(regexp = RegexSequence.Definition.PRINTABLE_CHARS, message = "The supplier may only contain printable characters")
+    private OrganizationalEntity supplier;
+
     @Persistent
     @Column(name = "GROUP", jdbcType = "VARCHAR")
     @Index(name = "PROJECT_GROUP_IDX")

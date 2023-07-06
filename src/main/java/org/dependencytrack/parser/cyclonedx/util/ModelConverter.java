@@ -361,12 +361,11 @@ public class ModelConverter {
                 }
                 if (project.getSupplier().getContacts() != null) {
                     List<OrganizationalContact> contacts = new ArrayList<>();
-
-                    for (org.cyclonedx.model.OrganizationalContact supplierContact: project.getSupplier().getContacts()) {
+                    for (org.cyclonedx.model.OrganizationalContact OrganizationalContact: project.getSupplier().getContacts()) {
                         OrganizationalContact contact = new OrganizationalContact();
-                        contact.setName(supplierContact.getName());
-                        contact.setEmail(supplierContact.getEmail());
-                        contact.setPhone(supplierContact.getPhone());
+                        contact.setName(OrganizationalContact.getName());
+                        contact.setEmail(OrganizationalContact.getEmail());
+                        contact.setPhone(OrganizationalContact.getPhone());
                         contacts.add(contact);
                     }
                     supplier.setContacts(contacts);

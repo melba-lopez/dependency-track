@@ -145,6 +145,7 @@ public class BomUploadProcessingTaskTest extends PersistenceCapableTest {
         assertThat(components).hasSize(1);
 
         final Component component = components.get(0);
+        assertThat(component.getSupplier()).isEqualTo("Example Incorporated"); /*Issue #2373, #2737 */
         assertThat(component.getAuthor()).isEqualTo("Sometimes this field is long because it is composed of a list of authors......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................");
         assertThat(component.getPublisher()).isEqualTo("Example Incorporated");
         assertThat(component.getGroup()).isEqualTo("com.example");
