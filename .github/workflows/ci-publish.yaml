@@ -10,7 +10,7 @@ on:
 
 jobs:
   read-version:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       version: ${{ steps.parse.outputs.version }}
     steps:

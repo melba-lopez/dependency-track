@@ -17,6 +17,7 @@ on:
   workflow_dispatch:
 
 jobs:
+  runs-on: self-hosted
   call-build:
     uses: ./.github/workflows/_meta-build.yaml
     with:
@@ -25,3 +26,4 @@ jobs:
     secrets:
       registry-0-usr: ${{ secrets.HUB_USERNAME }}
       registry-0-psw: ${{ secrets.HUB_ACCESSS_TOKEN }}
+      
