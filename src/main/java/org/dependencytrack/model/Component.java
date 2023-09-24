@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.github.packageurl.MalformedPackageURLException;
 import com.github.packageurl.PackageURL;
 import org.apache.commons.lang3.StringUtils;
-import org.cyclonedx.model.OrganizationalEntity
+import org.cyclonedx.model.OrganizationalEntity;
 import org.dependencytrack.model.validation.ValidSpdxExpression;
 import org.dependencytrack.resources.v1.serializers.CustomPackageURLSerializer;
 import javax.jdo.annotations.Column;
