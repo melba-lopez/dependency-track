@@ -32,7 +32,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.github.packageurl.MalformedPackageURLException;
 import com.github.packageurl.PackageURL;
 import org.dependencytrack.resources.v1.serializers.CustomPackageURLSerializer;
-
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.Element;
 import javax.jdo.annotations.Extension;
@@ -45,8 +44,8 @@ import javax.jdo.annotations.Order;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
-import javax.jdo.annotations.Unique;
 import javax.jdo.annotations.Serialized;
+import javax.jdo.annotations.Unique;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -266,8 +265,7 @@ public class Project implements Serializable {
     private List<ExternalReference> externalReferences;
 
     private transient ProjectMetrics metrics;
-
-    @JsonIgnore
+    private transient List<ProjectVersion> versions;
     private transient List<Component> dependencyGraph;
 
     public long getId() {
@@ -475,6 +473,14 @@ public class Project implements Serializable {
         this.metrics = metrics;
     }
 
+    public List<ProjectVersion> getVersions() {
+        return versions;
+    }
+
+    public void setVersions(List<ProjectVersion> versions) {
+        this.versions = versions;
+    }
+
     public List<Team> getAccessTeams() {
         return accessTeams;
     }
@@ -490,10 +496,12 @@ public class Project implements Serializable {
         this.accessTeams.add(accessTeam);
     }
 
+    @JsonIgnore
     public List<Component> getDependencyGraph() {
         return dependencyGraph;
     }
 
+    @JsonIgnore
     public void setDependencyGraph(List<Component> dependencyGraph) {
         this.dependencyGraph = dependencyGraph;
     }
@@ -514,13 +522,13 @@ public class Project implements Serializable {
             return sb.toString();
         }
     }
-    
+
     private final static class BooleanDefaultTrueSerializer extends JsonSerializer<Boolean> {
 
         @Override
         public void serialize(Boolean value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
             gen.writeBoolean(value != null ? value : true);
         }
-        
+
     }
 }

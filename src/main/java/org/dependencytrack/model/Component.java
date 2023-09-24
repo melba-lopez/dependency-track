@@ -28,9 +28,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.github.packageurl.MalformedPackageURLException;
 import com.github.packageurl.PackageURL;
 import org.apache.commons.lang3.StringUtils;
-import org.cyclonedx.model.OrganizationalEntity;
+import org.cyclonedx.model.OrganizationalEntity
+import org.dependencytrack.model.validation.ValidSpdxExpression;
 import org.dependencytrack.resources.v1.serializers.CustomPackageURLSerializer;
-
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.Element;
 import javax.jdo.annotations.Extension;
@@ -299,6 +299,12 @@ public class Component implements Serializable {
     private String license;
 
     @Persistent
+    @Column(name = "LICENSE_EXPRESSION", jdbcType = "CLOB", allowsNull = "true")
+    @Pattern(regexp = RegexSequence.Definition.PRINTABLE_CHARS, message = "The license expression may only contain printable characters")
+    @ValidSpdxExpression
+    private String licenseExpression;
+
+    @Persistent
     @Column(name = "LICENSE_URL", jdbcType = "VARCHAR")
     @Size(max = 255)
     @JsonDeserialize(using = TrimmedStringDeserializer.class)
@@ -365,12 +371,8 @@ public class Component implements Serializable {
     private transient DependencyMetrics metrics;
     private transient RepositoryMetaComponent repositoryMeta;
     private transient int usedBy;
-
-    @JsonIgnore
     private transient JsonObject cacheResult;
-
     private transient Set<String> dependencyGraph;
-
     private transient boolean expandDependencyGraph;
 
     public long getId() {
@@ -647,6 +649,14 @@ public class Component implements Serializable {
         this.license = StringUtils.abbreviate(license, 255);
     }
 
+    public String getLicenseExpression() {
+        return licenseExpression;
+    }
+
+    public void setLicenseExpression(String licenseExpression) {
+        this.licenseExpression = licenseExpression;
+    }
+
     public String getLicenseUrl() {
         return licenseUrl;
     }
@@ -785,10 +795,12 @@ public class Component implements Serializable {
         this.usedBy = usedBy;
     }
 
+    @JsonIgnore
     public JsonObject getCacheResult() {
         return cacheResult;
     }
 
+    @JsonIgnore
     public void setCacheResult(JsonObject cacheResult) {
         this.cacheResult = cacheResult;
     }

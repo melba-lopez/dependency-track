@@ -1,6 +1,6 @@
 FROM eclipse-temurin:17.0.7_7-jre-focal@sha256:20534a45cc565ac436593164c7f986f9499aa981b5bb8d936a11fcc25e41c55a AS jre-build
 
-FROM debian:bullseye-20230522-slim@sha256:7606bef5684b393434f06a50a3d1a09808fee5a0240d37da5d181b1b121e7637
+FROM debian:stable-slim@sha256:149e944a6f4855f9738baf4ddd79fc2f218e6440218223fa9017aebc1e45f1f5
 
 # Arguments that can be passed at build time
 # Directory names must end with / to avoid errors when ADDing and COPYing
@@ -32,7 +32,8 @@ ENV TZ=Etc/UTC \
     HOME=${DATA_DIR} \
     # Default notification publisher templates override environment variables
     DEFAULT_TEMPLATES_OVERRIDE_ENABLED=false \
-    DEFAULT_TEMPLATES_OVERRIDE_BASE_DIRECTORY=${DATA_DIR}
+    DEFAULT_TEMPLATES_OVERRIDE_BASE_DIRECTORY=${DATA_DIR} \
+    LOGGING_CONFIG_PATH="logback.xml"
 
 # Create the directories where the WAR will be deployed to (${APP_DIR}) and Dependency-Track will store its data (${DATA_DIR})
 # Create a user and assign home directory to a ${DATA_DIR}
@@ -52,7 +53,7 @@ RUN mkdir -p ${APP_DIR} ${DATA_DIR} \
 COPY --from=jre-build /opt/java/openjdk $JAVA_HOME
 
 # Copy the compiled WAR to the application directory created above
-COPY ./target/${WAR_FILENAME} ${APP_DIR}
+COPY ./target/${WAR_FILENAME} ./src/main/docker/logback-json.xml ${APP_DIR}
 
 # Specify the user to run as (in numeric format for compatibility with Kubernetes/OpenShift's SCC)
 USER ${UID}
@@ -61,7 +62,12 @@ USER ${UID}
 WORKDIR ${APP_DIR}
 
 # Launch Dependency-Track
-CMD exec java ${JAVA_OPTIONS} ${EXTRA_JAVA_OPTIONS} --add-opens java.base/java.util.concurrent=ALL-UNNAMED -DdependencyTrack.logging.level=${LOGGING_LEVEL} -jar ${WAR_FILENAME} -context ${CONTEXT}
+CMD exec java ${JAVA_OPTIONS} ${EXTRA_JAVA_OPTIONS} \
+    --add-opens java.base/java.util.concurrent=ALL-UNNAMED \
+    -Dlogback.configurationFile=${LOGGING_CONFIG_PATH} \
+    -DdependencyTrack.logging.level=${LOGGING_LEVEL} \
+    -jar ${WAR_FILENAME} \
+    -context ${CONTEXT}
 
 # Specify which port Dependency-Track listens on
 EXPOSE 8080
