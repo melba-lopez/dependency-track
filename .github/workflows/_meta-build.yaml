@@ -19,7 +19,7 @@ on:
 
 jobs:
   build-java:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4.0.0
@@ -57,7 +57,7 @@ jobs:
             target/bom.json
 
   build-container:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs:
       - build-java
 
