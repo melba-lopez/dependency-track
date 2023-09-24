@@ -453,7 +453,28 @@ public class ModelConverter {
             service.setProject(project);
         }
         service.setBomRef(StringUtils.trimToNull(cycloneDxService.getBomRef()));
-       
+               if (cycloneDxService.getProvider() != null) {
+            OrganizationalEntity provider = new OrganizationalEntity();;
+            provider.setName(cycloneDxService.getProvider().getName());
+            if (cycloneDxService.getProvider().getUrls() != null && cycloneDxService.getProvider().getUrls().size() > 0) {
+                provider.setUrls(cycloneDxService.getProvider().getUrls().toArray(new String[0]));
+            } else {
+                provider.setUrls(null);
+            }
+            if (cycloneDxService.getProvider().getContacts() != null) {
+                List<OrganizationalContact> contacts = new ArrayList<>();
+                for (org.cyclonedx.model.OrganizationalContact cycloneDxContact: cycloneDxService.getProvider().getContacts()) {
+                    OrganizationalContact contact = new OrganizationalContact();
+                    contact.setName(cycloneDxContact.getName());
+                    contact.setEmail(cycloneDxContact.getEmail());
+                    contact.setPhone(cycloneDxContact.getPhone());
+                    contacts.add(contact);
+                }
+                provider.setContacts(contacts);
+            }
+            service.setProvider(provider);
+        } else {
+            service.setProvider(null);
         }
         service.setGroup(StringUtils.trimToNull(cycloneDxService.getGroup()));
         service.setName(StringUtils.trimToNull(cycloneDxService.getName()));
