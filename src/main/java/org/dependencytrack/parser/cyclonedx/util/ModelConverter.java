@@ -94,6 +94,7 @@ public class ModelConverter {
         return components;
     }
 
+    /**Convert from CycloneDX to DT */
     @SuppressWarnings("deprecation")
     public static Component convert(final QueryManager qm, final org.cyclonedx.model.Component cycloneDxComponent, final Project project) {
         Component component = qm.matchSingleIdentity(project, new ComponentIdentity(cycloneDxComponent));
@@ -198,7 +199,8 @@ public class ModelConverter {
         }
         return component;
     }
-
+    
+    /**Convert from DT to CycloneDX */
     @SuppressWarnings("deprecation")
     public static org.cyclonedx.model.Component convert(final QueryManager qm, final Component component) {
         final org.cyclonedx.model.Component cycloneComponent = new org.cyclonedx.model.Component();
@@ -349,7 +351,7 @@ public class ModelConverter {
                 });
                 cycloneComponent.setExternalReferences(references);
             }
-            /*Issue #2737:  Adding supplier contact functionality */
+            /*Issue #2737:  Adding Supplier contact functionality */
             if (project.getSupplier() != null) {
                 OrganizationalEntity supplier = new OrganizationalEntity();
                 supplier.setName(project.getSupplier().getName());
@@ -361,16 +363,16 @@ public class ModelConverter {
                 }
                 if (project.getSupplier().getContacts() != null) {
                     List<OrganizationalContact> contacts = new ArrayList<>();
-                    for (org.cyclonedx.model.OrganizationalContact OrganizationalContact: project.getSupplier().getContacts()) {
+                    for (OrganizationalContact organizationalContact: project.getSupplier().getContacts()) {
                         OrganizationalContact contact = new OrganizationalContact();
-                        contact.setName(OrganizationalContact.getName());
-                        contact.setEmail(OrganizationalContact.getEmail());
-                        contact.setPhone(OrganizationalContact.getPhone());
+                        contact.setName(organizationalContact.getName());
+                        contact.setEmail(organizationalContact.getEmail());
+                        contact.setPhone(organizationalContact.getPhone());
                         contacts.add(contact);
                     }
                     supplier.setContacts(contacts);
                 }
-                project.setSupplier(supplier);
+                cycloneComponent.setSupplier(supplier);
             } else {
                 cycloneComponent.setSupplier(null);
             }
@@ -404,28 +406,7 @@ public class ModelConverter {
             service.setProject(project);
         }
         service.setBomRef(StringUtils.trimToNull(cycloneDxService.getBomRef()));
-        if (cycloneDxService.getProvider() != null) {
-            OrganizationalEntity provider = new OrganizationalEntity();;
-            provider.setName(cycloneDxService.getProvider().getName());
-            if (cycloneDxService.getProvider().getUrls() != null && cycloneDxService.getProvider().getUrls().size() > 0) {
-                provider.setUrls(cycloneDxService.getProvider().getUrls().toArray(new String[0]));
-            } else {
-                provider.setUrls(null);
-            }
-            if (cycloneDxService.getProvider().getContacts() != null) {
-                List<OrganizationalContact> contacts = new ArrayList<>();
-                for (org.cyclonedx.model.OrganizationalContact cycloneDxContact: cycloneDxService.getProvider().getContacts()) {
-                    OrganizationalContact contact = new OrganizationalContact();
-                    contact.setName(cycloneDxContact.getName());
-                    contact.setEmail(cycloneDxContact.getEmail());
-                    contact.setPhone(cycloneDxContact.getPhone());
-                    contacts.add(contact);
-                }
-                provider.setContacts(contacts);
-            }
-            service.setProvider(provider);
-        } else {
-            service.setProvider(null);
+       
         }
         service.setGroup(StringUtils.trimToNull(cycloneDxService.getGroup()));
         service.setName(StringUtils.trimToNull(cycloneDxService.getName()));

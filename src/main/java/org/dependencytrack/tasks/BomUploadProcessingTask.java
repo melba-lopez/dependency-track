@@ -109,11 +109,8 @@ public class BomUploadProcessingTask implements Subscriber {
                         if (project.getClassifier() == null) {
                             final var classifier = Optional.ofNullable(cycloneDxBom.getMetadata())
                                 .map(org.cyclonedx.model.Metadata::getComponent)
-                                .map(org.cyclonedx.model.Metadata::getSupplier) /**Issue #2373, #2737 */
-                                .map(org.cyclonedx.model.Metadata::getManufacture)
                                 .map(org.cyclonedx.model.Component::getType)
                                 .map(org.cyclonedx.model.Component.Type::name)
-                                .map(org.cyclonedx.model.Component::getSupplier) /**Issue #2373, #2737 */
                                 .map(Classifier::valueOf)
                                 .orElse(Classifier.APPLICATION);
                             project.setClassifier(classifier);
